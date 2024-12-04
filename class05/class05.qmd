@@ -1,0 +1,130 @@
+---
+title: "Class 5: Data Viz with ggplot"
+author: "AE Pasquinelli"
+format: pdf
+---
+
+R has lots of ways to make figures and graphs in particular.
+One that comes with R out of the box is called **"base" R** - the `plot()` function.
+
+```{r}
+cars
+
+```
+```{r}
+plot(cars)
+```
+A very popular package in this area is called **ggplot2**.
+Before I can use any add on package like this I must install it with the `install.packages("ggplot")` command/function
+
+Then use the package I need to load it with a `library(ggplot2)` call.
+```{r}
+
+```
+
+```{r}
+library(ggplot2)
+ggplot(cars) +
+  aes(x=speed, y=dist) + geom_point() 
+```
+Every ggplot has at least 3 layers
+- **data** (data.frame with the numbers or stuff you want to plot)
+- **aes**thetics (mapping of your data columns to your plot)
+- geoms (there are tons of these, basics are geom_point(), geom_line(), geom_col()
+
+For "simple" plots like this one base R code will be much shorter than ggplot code.
+Lets fit a line and show it on plot
+
+```{r}
+ggplot(cars) +
+  aes(x=speed, y=dist) + geom_point() +
+  geom_smooth()
+```
+
+```{r}
+head(mtcars)
+```
+Make me a ggplot of the mtcars data set using `mpg` vs `disp`
+and set the size of the points to the `hp`.
+
+```{r}
+ggplot(mtcars) + aes(x=mpg, y=disp, col=am, size=hp) + geom_point()
+```
+
+```{r}
+ggplot(mtcars) + aes(x=mpg, y=disp, size=hp) + geom_point(col="blue")
+```
+#comment
+ggplot(mtcars) + aes(x=mpg, y=disp, col=am,  labels=rownames, size=hp) + geom_point() + facet_wrap(~am)
+
+```{r}
+library(ggrepel)
+
+ggplot(mtcars) + aes(x=mpg, y=disp, col=am, label=rownames(mtcars)) + geom_point() + facet_wrap(~am) + geom_text_repel()
+```
+
+
+```{r}
+url <- "https://bioboot.github.io/bimm143_S20/class-material/up_down_expression.txt"
+genes <- read.delim(url)
+head(genes)
+```
+##Gene expression list
+
+```{r}
+
+url <- "https://bioboot.github.io/bimm143_S20/class-material/up_down_expression.txt"
+genes <- read.delim(url)
+head(genes)
+```
+
+```{r}
+nrow(genes)
+```
+There are `nrow(genes)` genes in this dataset.
+```{r}
+unique(genes$State)
+```
+The table function is a super useful utility to tell me how many entries of each type there are
+```{r}
+table(genes$State)/ nrow(genes) * 100
+```
+
+```{r}
+round(table(genes$State) / nrow(genes), 3)
+```
+The functions `nrow()`, `ncol()`, and `table()` are ones I want you to know
+```{r}
+ggplot(genes) + aes(x=Condition1, y=Condition2) + geom_point()
+```
+```{r}
+p <- ggplot(genes) + 
+    aes(x=Condition1, y=Condition2, col=State) +
+    geom_point()
+p
+```
+
+```{r}
+p + scale_colour_manual( values=c("blue","gray","red") )
+```
+
+```{r}
+#labs(x = "Drug Treatment", y = "Control (no drug)")
+p <- ggplot(genes) + 
+    aes(x=Condition1, y=Condition2, col=State) + 
+    labs(x="Drug Treatment",
+         y="Control",
+         title="Gene Expression") +
+    geom_point()
+
+p
+```
+
+```{r}
+ggplot(mtcars) + aes(mpg, disp) + geom_point()
+
+ggsave("myplot.pdf")
+```
+>Key points
+
+Multi-plot

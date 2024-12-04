@@ -1,0 +1,146 @@
+---
+title: "Class 6: R Functions"
+author: "AE Pasquinelli"
+format: html
+---
+
+```{r}
+add<- function(x,y=1) {x+y}
+```
+#run add to put in functions and be used again
+```{r}
+add(10,10)
+```
+
+```{r}
+add(10)
+add(10, y=10)
+```
+
+# A second function
+
+#Let's try something more interesting
+```{r}
+#generate_dna  < function
+
+bases <- c("A", "C", "T", "G")
+sequence <- sample(bases, size=10, replace=TRUE)
+```
+#These 2 snippets work and now I can make it into a function
+```{r}
+generate_DNA <- function(length) {
+  bases <- c("A", "C", "T", "G")
+sequence <- sample(bases, size=length, replace=TRUE)
+return(sequence)
+}
+```
+
+
+
+```{r}
+generate_DNA(10)
+```
+
+```{r}
+
+generate_DNA(length=10)
+
+```
+
+```{r}
+aa <- unique(bio3d::aa.table$aa1)[1:20]
+
+```
+```{r}
+generate_protein <- function(length) {
+  aminoacids <- unique(bio3d::aa.table$aa1)[1:20]
+  sequence <- sample(aminoacids, size=length, replace=TRUE)
+  sequence <- paste(sequence, collapse = "")
+  return(sequence)
+}
+```
+#added paste to above to remove spaces
+```{r}
+generate_protein(15)
+```
+
+```{r}
+generate_protein(length=7)
+```
+
+```{r}
+generate_protein(length=6)
+generate_protein(length=7)
+generate_protein(length=8)
+generate_protein(length=9)
+generate_protein(length=10)
+generate_protein(length=11)
+generate_protein(length=12)
+generate_protein(length=13)
+```
+```{r}
+generate_protein()
+```
+generate protein seq of length 6 to 12
+```{r}
+answer <- sapply(6:12, generate_protein)
+answer
+```
+
+```{r}
+paste(">id.", 6:12, sep = "")
+```
+```{r}
+paste(">id.",  6:12, "\n", answer, sep = "", "\n")
+```
+
+```{r}
+cat (paste(">id.",  6:12, "\n", answer, sep = "", "\n"), sep = "")
+
+```
+# Can you improve this analysis code?
+```{r}
+library(bio3d)
+s1 <- read.pdb("4AKE") # kinase with drug
+s2 <- read.pdb("1AKE") # kinase no drug
+s3 <- read.pdb("1E4Y") # kinase with drug
+s1.chainA <- trim.pdb(s1, chain="A", elety="CA")
+s2.chainA <- trim.pdb(s2, chain="A", elety="CA")
+s3.chainA <- trim.pdb(s3, chain="A", elety="CA")
+s1.b <- s1.chainA$atom$b
+s2.b <- s2.chainA$atom$b
+s3.b <- s3.chainA$atom$b
+plotb3(s1.b, sse=s1.chainA, typ="l", ylab="Bfactor")
+plotb3(s2.b, sse=s2.chainA, typ="l", ylab="Bfactor")
+plotb3(s3.b, sse=s3.chainA, typ="l", ylab="Bfactor")
+```
+```{r}
+pdb_processing <- function (pdb) {
+  s <- read.pdb(pdb)
+  s.chainA <- trim.pdb(s, chain="A", elety="CA")
+  s.b <- s.chainA$atom$b
+  plotb3(s.b, sse=s.chainA, typ="l", ylab="Bfactor")
+}
+```
+
+```{r}
+pdb_processing("4AKE")
+```
+#use this code for TBP
+```{r}
+pdb_processing("2CZR")
+
+```
+#use apply to run multiple variables
+```{r}
+pdb_processing("1AKE")
+```
+
+```{r}
+pdb_processing("1E4Y")
+```
+
+```{r}
+pdb_processing("1K1F")
+```
+
